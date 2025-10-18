@@ -118,6 +118,13 @@ For more installation options, see [Installer Options](https://localai.io/docs/a
 
 Or run with docker:
 
+> **💡 Docker Run vs Docker Start**
+> 
+> - `docker run` creates and starts a new container. If a container with the same name already exists, this command will fail.
+> - `docker start` starts an existing container that was previously created with `docker run`.
+> 
+> If you've already run LocalAI before and want to start it again, use: `docker start -i local-ai`
+
 ### CPU only image:
 
 ```bash
@@ -197,6 +204,8 @@ For more information, see [💻 Getting started](https://localai.io/basics/getti
 
 ## 📰 Latest project news
 
+- October 2025: 🔌 [Model Context Protocol (MCP)](https://localai.io/docs/features/mcp/) support added for agentic capabilities with external tools
+- September 2025: New Launcher application for MacOS and Linux, extended support to many backends for Mac and Nvidia L4T devices. Models: Added MLX-Audio, WAN 2.2. WebUI improvements and Python-based backends now ships portable python environments.
 - August 2025: MLX, MLX-VLM, Diffusers and llama.cpp are now supported on Mac M1/M2/M3+ chips ( with `development` suffix in the gallery ): https://github.com/mudler/LocalAI/pull/6049 https://github.com/mudler/LocalAI/pull/6119 https://github.com/mudler/LocalAI/pull/6121 https://github.com/mudler/LocalAI/pull/6060
 - July/August 2025: 🔍 [Object Detection](https://localai.io/features/object-detection/) added to the API featuring [rf-detr](https://github.com/roboflow/rf-detr)
 - July 2025: All backends migrated outside of the main binary. LocalAI is now more lightweight, small, and automatically downloads the required backend to run the model. [Read the release notes](https://github.com/mudler/LocalAI/releases/tag/v3.2.0)
@@ -235,6 +244,7 @@ Roadmap items: [List of issues](https://github.com/mudler/LocalAI/issues?q=is%3A
 - 🔍 [Object Detection](https://localai.io/features/object-detection/)
 - 📈 [Reranker API](https://localai.io/features/reranker/)
 - 🆕🖧 [P2P Inferencing](https://localai.io/features/distribute/)
+- 🆕🔌 [Model Context Protocol (MCP)](https://localai.io/features/mcp/) - Agentic capabilities with external tools
 - [Agentic capabilities](https://github.com/mudler/LocalAGI)
 - 🔊 Voice activity detection (Silero-VAD support)
 - 🌍 Integrated WebUI!
@@ -266,6 +276,7 @@ LocalAI supports a comprehensive range of AI backends with multiple acceleration
 | **piper** | Fast neural TTS system | CPU |
 | **kitten-tts** | Kitten TTS models | CPU |
 | **silero-vad** | Voice Activity Detection | CPU |
+| **neutts** | Text-to-speech with voice cloning | CUDA 12, ROCm, CPU |
 
 ### Image & Video Generation
 | Backend | Description | Acceleration Support |
@@ -287,7 +298,7 @@ LocalAI supports a comprehensive range of AI backends with multiple acceleration
 |-------------------|-------------------|------------------|
 | **NVIDIA CUDA 11** | llama.cpp, whisper, stablediffusion, diffusers, rerankers, bark, chatterbox | Nvidia hardware |
 | **NVIDIA CUDA 12** | All CUDA-compatible backends | Nvidia hardware |
-| **AMD ROCm** | llama.cpp, whisper, vllm, transformers, diffusers, rerankers, coqui, kokoro, bark | AMD Graphics |
+| **AMD ROCm** | llama.cpp, whisper, vllm, transformers, diffusers, rerankers, coqui, kokoro, bark, neutts | AMD Graphics |
 | **Intel oneAPI** | llama.cpp, whisper, stablediffusion, vllm, transformers, diffusers, rfdetr, rerankers, exllama2, coqui, kokoro, bark | Intel Arc, Intel iGPUs |
 | **Apple Metal** | llama.cpp, whisper, diffusers, MLX, MLX-VLM, bark-cpp | Apple M1/M2/M3+ |
 | **Vulkan** | llama.cpp, whisper, stablediffusion | Cross-platform GPUs |
@@ -303,6 +314,12 @@ WebUIs:
 - https://github.com/Jirubizu/localai-admin
 - https://github.com/go-skynet/LocalAI-frontend
 - QA-Pilot(An interactive chat project that leverages LocalAI LLMs for rapid understanding and navigation of GitHub code repository) https://github.com/reid41/QA-Pilot
+
+Agentic Libraries:
+- https://github.com/mudler/cogito
+
+MCPs:
+- https://github.com/mudler/MCPs
 
 Model galleries
 - https://github.com/go-skynet/model-gallery

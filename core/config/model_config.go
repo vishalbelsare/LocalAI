@@ -26,6 +26,7 @@ type TTSConfig struct {
 
 // ModelConfig represents a model configuration
 type ModelConfig struct {
+	modelConfigFile          string `yaml:"-" json:"-"`
 	schema.PredictionOptions `yaml:"parameters" json:"parameters"`
 	Name                     string `yaml:"name" json:"name"`
 
@@ -73,6 +74,56 @@ type ModelConfig struct {
 
 	Options   []string `yaml:"options" json:"options"`
 	Overrides []string `yaml:"overrides" json:"overrides"`
+
+	MCP   MCPConfig   `yaml:"mcp" json:"mcp"`
+	Agent AgentConfig `yaml:"agent" json:"agent"`
+}
+
+type MCPConfig struct {
+	Servers string `yaml:"remote" json:"remote"`
+	Stdio   string `yaml:"stdio" json:"stdio"`
+}
+
+type AgentConfig struct {
+	MaxAttempts           int  `yaml:"max_attempts" json:"max_attempts"`
+	MaxIterations         int  `yaml:"max_iterations" json:"max_iterations"`
+	EnableReasoning       bool `yaml:"enable_reasoning" json:"enable_reasoning"`
+	EnableReEvaluation    bool `yaml:"enable_re_evaluation" json:"enable_re_evaluation"`
+	EnablePlanning        bool `yaml:"enable_planning" json:"enable_planning"`
+	EnableMCPPrompts      bool `yaml:"enable_mcp_prompts" json:"enable_mcp_prompts"`
+	EnablePlanReEvaluator bool `yaml:"enable_plan_re_evaluator" json:"enable_plan_re_evaluator"`
+}
+
+func (c *MCPConfig) MCPConfigFromYAML() (MCPGenericConfig[MCPRemoteServers], MCPGenericConfig[MCPSTDIOServers]) {
+	var remote MCPGenericConfig[MCPRemoteServers]
+	var stdio MCPGenericConfig[MCPSTDIOServers]
+
+	if err := yaml.Unmarshal([]byte(c.Servers), &remote); err != nil {
+		return remote, stdio
+	}
+
+	if err := yaml.Unmarshal([]byte(c.Stdio), &stdio); err != nil {
+		return remote, stdio
+	}
+
+	return remote, stdio
+}
+
+type MCPGenericConfig[T any] struct {
+	Servers T `yaml:"mcpServers" json:"mcpServers"`
+}
+type MCPRemoteServers map[string]MCPRemoteServer
+type MCPSTDIOServers map[string]MCPSTDIOServer
+
+type MCPRemoteServer struct {
+	URL   string `json:"url"`
+	Token string `json:"token"`
+}
+
+type MCPSTDIOServer struct {
+	Args    []string          `json:"args"`
+	Env     map[string]string `json:"env"`
+	Command string            `json:"command"`
 }
 
 // Pipeline defines other models to use for audio-to-audio
@@ -443,6 +494,10 @@ func (c *ModelConfig) Validate() bool {
 
 func (c *ModelConfig) HasTemplate() bool {
 	return c.TemplateConfig.Completion != "" || c.TemplateConfig.Edit != "" || c.TemplateConfig.Chat != "" || c.TemplateConfig.ChatMessage != ""
+}
+
+func (c *ModelConfig) GetModelConfigFile() string {
+	return c.modelConfigFile
 }
 
 type ModelConfigUsecases int
